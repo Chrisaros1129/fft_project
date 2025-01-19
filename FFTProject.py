@@ -20,8 +20,6 @@ def load_audio_files(directory):
     
 
 def process_audio_file(file):
-    print(f"Processing: {file.name}") # f-string is what its called. It returned this: Processing: bellsTibetan.wav
-
     # load audio file
     sampling_rate, audio_data = wavfile.read(file)
     
@@ -38,10 +36,12 @@ def process_audio_file(file):
     return sampling_rate, audio_data
 
 def audio_fft_time_data(audio_data,sampling_rate):
+    '''returns array containing normalized audio, time, frequencies, and magnitude respectfully'''
     # TIME
 
     # Normalize the data
-    audio_data = audio_data / np.max(np.abs(audio_data), axis = 0)
+    audio_data_n = audio_data / np.max(np.abs(audio_data), axis = 0)
+    print(f"Audio data after normalized {audio_data_n}")
     # Sampling points
     N = len(audio_data)
     # Spacing
@@ -50,27 +50,27 @@ def audio_fft_time_data(audio_data,sampling_rate):
     t = np.linspace(0., T, N)
     
     # FFT
-    yf = fft(audio_data)
+    yf = fft(audio_data_n)
     xf = fftfreq(N, 1/sampling_rate)
     # Adjust to positive frequencies only
     xf = xf[:N//2]
     yf = np.abs(yf[:N//2])
 
-    #PLOTS
-    
+    return audio_data_n, t, xf, yf
+
+#PLOTS
+
+def plot_data(index,x,y,file,plot_title,x_label,y_label):
+    '''Parameters: (index,x,y,file,plot_title,x_label,y_label)'''
+    plt.figure(index,figsize=(10,4))
+    plt.plot(x,y)
+    plt.title(plot_title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+    plt.show()
 
 
-    
-   
-
-    
-
-    
-    
-    
-
-
-# a random comment
 
 
 def main():
@@ -78,25 +78,15 @@ def main():
     if not files: # If files is empty. NOT is a boolean. 
         print("No .wav files found in the directory.")
         sys.exit()
-    print(files)
     
     for file in files:
         print(f"Processing: {file}")
         sampling_rate, audio_data = process_audio_file(file)
-        
         index = files.index(file)+1
         print(index)
-        
-        plt.figure(index,figsize=(10,4))
-        plt.plot(t,audio_data)
-        plt.title(f"Time Domain of {file.name}")
-        plt.xlabel("Time [s]")
-        plt.ylabel("Amplitude")
-        audio_fft_time_data(audio_data)
-
-
-
-    
+        audio_data_n,t, xf, yf = audio_fft_time_data(audio_data,sampling_rate)
+        plot_data(index,t,audio_data_n,file,f"Time Domain of {file.name}","Time [s]","Amplitude")
+        plot_data(index,xf,yf,file,f"Frequency Domain of {file.name}","Frequency [Hz]","Magnitude")
 
 if __name__ == "__main__":
     main()
