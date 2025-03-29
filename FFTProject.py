@@ -8,7 +8,7 @@ from pathlib import Path
 from scipy.io import wavfile
 from scipy.fft import fft, fftfreq
 
-
+import pdb
 
 
 WAV_DIRECTORY = Path("C:/Users/ghost/OneDrive/Documents/Code Practice/Emily Python Lessons/fft_project/WAV_Files") ## Global variables typically upper case
@@ -27,10 +27,12 @@ def load_audio_files(directory: Path):
     # 
     # Get all .wav files in directory
     files = list(directory.glob('*.wav')) ## * is called wildcard
+
+    ## pdb.set_trace()
     return files
     
 
-def process_audio_file(file: list):
+def process_audio_file(file: Path):
     # load audio file
     sampling_rate, audio_data = wavfile.read(file)
     
@@ -46,9 +48,10 @@ def process_audio_file(file: list):
         print("Mono L: ",audio_data)
     return sampling_rate, audio_data
 
-def audio_fft_time_data(audio_data: list ,sampling_rate: int):
+def audio_fft_time_data(audio_data: np.ndarray ,sampling_rate: int):
     '''returns array containing normalized audio, time, frequencies, and magnitude respectfully'''
     # TIME
+    pdb.set_trace()
 
     # Normalize the data
     audio_data_norm = audio_data / np.max(np.abs(audio_data), axis = 0)
@@ -103,4 +106,3 @@ if __name__ == "__main__":
 
     # directory 
     # C:\Users\ghost\OneDrive\Documents\Code Practice\Emily Python Lessons\fft_project\WAV_Files
-
