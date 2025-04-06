@@ -1,4 +1,5 @@
 import FFTProject as fft
+import numpy as np
 
 from pathlib import Path
 
@@ -17,7 +18,8 @@ def test_load_audio_files():
 def test_process_audio_file():
     fft.process_audio_file(SAVE_DIRECTORY)
 
+Sample_data = np.ndarray([1,2,3,4,5])
 def test_audio_fft_time_data():
-    fft.audio_fft_time_data()
+    fft.audio_fft_time_data(Sample_data)
 
 # def test_plot_data(index: int, x: list, y: list, plot_title: str, x_label: str, y_label: str):
