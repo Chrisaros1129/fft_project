@@ -33,7 +33,9 @@ def load_audio_files(directory: Path):
     
 
 def process_audio_file(file: Path):
+    '''Take a .wav file path and returns sampling rate and audio data'''
     # load audio file
+    #pdb.set_trace()
     sampling_rate, audio_data = wavfile.read(file)
     
     # sampling_rate, audio_data = wavefile.read(file) # It gave this warning: WavFileWarning: Chunk (non-data) not understood, skipping it.
@@ -41,17 +43,18 @@ def process_audio_file(file: Path):
 
     print("Sampling Rate: ", sampling_rate)
     print("Audio: ", audio_data)
-
+    
     # Handling stereo by selecting one channel
     if len(audio_data.shape) > 1:
         audio_data = audio_data[:,0]
         print("Mono L: ",audio_data)
+    pdb.set_trace()
     return sampling_rate, audio_data
 
 def audio_fft_time_data(audio_data: np.ndarray ,sampling_rate: int):
     '''returns array containing normalized audio, time, frequencies, and magnitude respectfully'''
     # TIME
-    pdb.set_trace()
+    #pdb.set_trace()
 
     # Normalize the data
     audio_data_norm = audio_data / np.max(np.abs(audio_data), axis = 0)
@@ -81,6 +84,7 @@ def plot_data(index: int, x: list, y: list, plot_title: str, x_label: str, y_lab
     plt.title(plot_title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
+
 
 def main():
     files = load_audio_files(WAV_DIRECTORY)
